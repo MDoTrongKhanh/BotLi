@@ -1,0 +1,41 @@
+name: Deploy Lichess Bot
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install Stockfish 17
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y stockfish  # Cài đặt Stockfish từ repository của Ubuntu
+        wget https://stockfishchess.org/files/stockfish_17_x64_bmi2_linux.zip  # Tải bản Stockfish 17
+        unzip stockfish_17_x64_bmi2_linux.zip  # Giải nén Stockfish
+        sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
+
+    - name: Run the bot
+      env:
+        LICHESS_API_KEY: ${{ secrets.LICHESS_API_KEY }}  # Thêm API Key của bạn vào GitHub Secrets
+      run: |
+        python user_interface.py --matchmaking  # Thay thế bằng tên file bot của bạn nếu khác
