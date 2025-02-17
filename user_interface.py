@@ -15,12 +15,25 @@ from enums import Challenge_Color, Perf_Type, Variant
 from event_handler import Event_Handler
 from game_manager import Game_Manager
 from logo import LOGO
+import berserk
 
 # Kiểm tra API token
 api_token = os.getenv("LICHESS_API_KEY")
 if not api_token:
     raise RuntimeError("No Lichess API token found.")
-print(f"API Token: {api_token}")  # In ra để kiểm tra
+print(f"API Token: {api_token}")  # In ra token để kiểm tra
+
+# Kết nối với API Lichess
+session = berserk.TokenSession(api_token)
+client = berserk.Client(session)
+
+# Lấy thông tin tài khoản
+try:
+    account = client.users.get('me')  # 'me' là tài khoản hiện tại của bot
+    print("Account information retrieved successfully:")
+    print(account)  # In thông tin tài khoản
+except Exception as e:
+    print(f"Error while fetching account info: {e}")
 
 try:
     import readline
