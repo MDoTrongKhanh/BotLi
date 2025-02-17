@@ -31,12 +31,24 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y wget tar  # Cài đặt tar nếu chưa có
         wget https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20250213-fa6c30af/stockfish-ubuntu-x86-64-bmi2.tar  # URL mới cho Stockfish
-        tar -xvf stockfish-ubuntu-x86-64-bmi2.tar  # Sử dụng tar để giải nén
-        ls -l  # In ra danh sách các tệp trong thư mục hiện tại
-        find . -name "stockfish*"  # Tìm tất cả tệp có tên bắt đầu bằng "stockfish"
-        sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
+        
+        # Liệt kê nội dung trong tệp nén để kiểm tra tên tệp stockfish
+        tar -tvf stockfish-ubuntu-x86-64-bmi2.tar
+        
+        # Giải nén tệp Stockfish
+        tar -xvf stockfish-ubuntu-x86-64-bmi2.tar 
+        
+        # Liệt kê lại các tệp đã giải nén
+        ls -l  
+        
+        # Tìm tất cả các tệp liên quan đến stockfish trong thư mục hiện tại
+        find . -name "stockfish*"  
+
+        # Kiểm tra tên và di chuyển Stockfish vào thư mục bin
+        sudo mv ./engines/stockfish-ubuntu-x86-64-bmi2 /usr/local/bin/stockfish
+        
         mkdir -p ./engines  # Tạo thư mục engines nếu chưa có
-        mv stockfish ./engines/stockfish-ubuntu-x86-64-bmi2  # Di chuyển Stockfish vào thư mục engines
+        mv /usr/local/bin/stockfish ./engines/stockfish-ubuntu-x86-64-bmi2  # Di chuyển Stockfish vào thư mục engines
 
     - name: Run the bot
       env:
