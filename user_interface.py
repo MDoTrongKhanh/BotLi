@@ -16,6 +16,12 @@ from event_handler import Event_Handler
 from game_manager import Game_Manager
 from logo import LOGO
 
+# Kiểm tra API token
+api_token = os.getenv("LICHESS_API_KEY")
+if not api_token:
+    raise RuntimeError("No Lichess API token found.")
+print(f"API Token: {api_token}")  # In ra để kiểm tra
+
 try:
     import readline
 except ImportError:
