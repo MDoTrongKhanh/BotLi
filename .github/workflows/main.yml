@@ -26,55 +26,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Install Stockfish 15.1 (hoặc phiên bản mới nhất)
+    - name: Install Stockfish 20250213
       run: |
         sudo apt-get update
         sudo apt-get install -y wget tar  # Cài đặt tar nếu chưa có
-        wget name: Deploy Lichess Bot
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Install Stockfish 15.1 (hoặc phiên bản mới nhất)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget tar  # Cài đặt tar nếu chưa có
-        wget https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20250213-fa6c30af/stockfish-ubuntu-x86-64-bmi2.tar  # URL cho Stockfish tar
+        wget https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20250213-fa6c30af/stockfish-ubuntu-x86-64-bmi2.tar  # URL mới cho Stockfish
         tar -xvf stockfish-ubuntu-x86-64-bmi2.tar  # Sử dụng tar để giải nén
-        sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
-        mkdir -p ./engines  # Tạo thư mục engines nếu chưa có
-        mv stockfish ./engines/stockfish-ubuntu-x86-64-bmi2.tar  # Di chuyển Stockfish vào thư mục engines
-
-    - name: Run the bot
-      env:
-        LICHESS_API_KEY: ${{ secrets.LICHESS_API_KEY }}  # Thêm API Key của bạn vào GitHub Secrets
-      run: |
-        python user_interface.py --matchmaking  # Chạy lệnh với đối số --matchmaking
-  # URL cho Stockfish tar
-        tar -xvf stockfish_15.1_x64_bmi2.tar  # Sử dụng tar để giải nén
         sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
         mkdir -p ./engines  # Tạo thư mục engines nếu chưa có
         mv stockfish ./engines/stockfish-ubuntu-x86-64-bmi2  # Di chuyển Stockfish vào thư mục engines
