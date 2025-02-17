@@ -49,7 +49,7 @@ gaviota:
   max_pieces: 5                           # Count of max pieces in the local gaviota endgame tablebases.
 
 opening_books:
-  enabled: true
+  enabled: false
   priority: 400
   books:
     bullet_white:
