@@ -39,16 +39,16 @@ jobs:
         tar -xvf stockfish-ubuntu-x86-64-bmi2.tar 
         
         # In ra danh sách các tệp đã giải nén
-        ls -l  
+        ls -l  # Kiểm tra các tệp trong thư mục hiện tại
         
-        # Tìm tất cả các tệp liên quan đến stockfish trong thư mục hiện tại
-        find . -name "stockfish*"  
-
+        # Tìm tất cả các tệp có tên stockfish
+        find . -name "stockfish*"  # Tìm các tệp có tên bắt đầu bằng "stockfish"
+        
         # Tạo thư mục engines nếu chưa có
         mkdir -p ./engines
         
-        # Kiểm tra tên tệp Stockfish và di chuyển nó vào thư mục engines
-        sudo mv stockfish-ubuntu-x86-64-bmi2 ./engines/stockfish-ubuntu-x86-64-bmi2
+        # Di chuyển Stockfish vào thư mục engines
+        mv stockfish/stockfish-ubuntu-x86-64-bmi2 ./engines/stockfish-ubuntu-x86-64-bmi2  # Di chuyển đúng tệp vào thư mục engines
 
     - name: Run the bot
       env:
