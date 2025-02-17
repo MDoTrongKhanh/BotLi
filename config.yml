@@ -49,24 +49,21 @@ gaviota:
   max_pieces: 5                           # Count of max pieces in the local gaviota endgame tablebases.
 
 opening_books:
-  enabled: false
+  enabled: true
   priority: 400
   books:
     bullet_white:
       selection: uniform_random
       names:
-        - OPTIMUS
-        - Raid
+        - OlisFish
     bullet_black:
       selection: best_move
       names:
         - OlisFish
-        - OPTIMUS
     standard:
       selection: weighted_random
       max_depth: 8
       names:
-        - Raid
         - OlisFish
     
 
@@ -93,7 +90,7 @@ online_moves:
 #   max_depth: 16                         # Half move max depth. (Comment this line for max depth)
 #   max_moves: 1                          # Max number of moves played from Lichess cloud eval. (Comment this line for max moves)
   chessdb:
-    enabled: false                         # Activate online moves from https://chessdb.cn/queryc_en/
+    enabled: true                         # Activate online moves from https://chessdb.cn/queryc_en/
     priority: 100                         # Priority with which this move source is used. Higher priority is used first.
     min_eval_depth: 10                    # Minimum evaluation depth.
     min_time: 10                          # Time the bot must have at least to use the online move. +10 seconds in games without increment.
@@ -208,8 +205,5 @@ blacklist:                              # List of users who are not challenged a
   - Nikitosik1708
 
 books:
-  LesChats: "./engines/LesChats.bin"
   OlisFish: "./engines/OlisFish.bin"
-  OPTIMUS: "./engines/OPTIMUS.bin"
-  Raid: "./engines/Raid.bin"
   
