@@ -29,10 +29,8 @@ jobs:
     - name: Install Stockfish 17
       run: |
         sudo apt-get update
-        sudo apt-get install -y stockfish  # Cài đặt Stockfish từ repository của Ubuntu
-        # Hoặc nếu bạn muốn cài đặt phiên bản mới nhất từ GitHub:
         sudo apt-get install -y wget unzip
-        wget https://github.com/official-stockfish/Stockfish/releases/download/stockfish_2023-02-14/stockfish_2023-02-14_x64_bmi2.zip
+        wget https://github.com/official-stockfish/Stockfish/releases/download/2023-02-14/stockfish_2023-02-14_x64_bmi2.zip  # Đảm bảo URL đúng cho Linux
         unzip stockfish_2023-02-14_x64_bmi2.zip
         sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
 
@@ -40,4 +38,4 @@ jobs:
       env:
         LICHESS_API_KEY: ${{ secrets.LICHESS_API_KEY }}  # Thêm API Key của bạn vào GitHub Secrets
       run: |
-        python bot.py  # Thay thế bằng tên file bot của bạn nếu khác
+        python user_interface.py --matchmaking  # Chạy lệnh mới với đối số --matchmaking
