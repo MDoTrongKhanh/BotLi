@@ -11,16 +11,16 @@ engines:
       Threads: 4                          # Max CPU threads the engine can use.
       Hash: 256                           # Max memory (in megabytes) the engine can allocate.
       Move Overhead: 100                  # Increase if your bot flags games too often.
-  variants:                               # Engine used for variants when no suitable special engine is configured.
-    dir: "./engines"                      # Directory containing the engine.
-    name: "Khanh_AI_FAIRYSTOCKFISH.exe"               # Binary name of the engine to use.
-    ponder: true                          # Think on opponent's time.
-    silence_stderr: false                 # Suppresses stderr output.
-    move_overhead_multiplier: 1.0         # Increase if your bot flags games too often. Default move overhead is 1 second per 1 minute initital time.
-    uci_options:                          # Arbitrary UCI options passed to the engine. (Commenting allowed)
-      Threads: 4                          # Max CPU threads the engine can use.
-      Hash: 256                           # Max memory (in megabytes) the engine can allocate.
-      Move Overhead: 100                  # Increase if your bot flags games too often.
+#variants:                               # Engine used for variants when no suitable special engine is configured.
+#    dir: "./engines"                      # Directory containing the engine.
+#    name: "stockfish"               # Binary name of the engine to use.
+#    ponder: true                          # Think on opponent's time.
+#    silence_stderr: false                 # Suppresses stderr output.
+#    move_overhead_multiplier: 1.0         # Increase if your bot flags games too often. Default move overhead is 1 second per 1 minute initital time.
+#    uci_options:                          # Arbitrary UCI options passed to the engine. (Commenting allowed)
+#      Threads: 4                          # Max CPU threads the engine can use.
+#      Hash: 256                           # Max memory (in megabytes) the engine can allocate.
+#      Move Overhead: 100                  # Increase if your bot flags games too often.
   
 syzygy:
   standard:
