@@ -32,6 +32,7 @@ jobs:
         sudo apt-get install -y wget tar  # Cài đặt tar nếu chưa có
         wget https://github.com/official-stockfish/Stockfish/releases/download/stockfish-dev-20250213-fa6c30af/stockfish-ubuntu-x86-64-bmi2.tar  # URL mới cho Stockfish
         tar -xvf stockfish-ubuntu-x86-64-bmi2.tar  # Sử dụng tar để giải nén
+        ls -l  # In ra danh sách các tệp trong thư mục hiện tại để kiểm tra tên tệp Stockfish
         sudo mv stockfish /usr/local/bin/stockfish  # Di chuyển Stockfish vào thư mục bin để sử dụng
         mkdir -p ./engines  # Tạo thư mục engines nếu chưa có
         mv stockfish ./engines/stockfish-ubuntu-x86-64-bmi2  # Di chuyển Stockfish vào thư mục engines
