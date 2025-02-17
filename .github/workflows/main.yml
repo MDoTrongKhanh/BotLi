@@ -54,4 +54,4 @@ jobs:
       env:
         LICHESS_API_KEY: ${{ secrets.LICHESS_API_KEY }}  # Thêm API Key của bạn vào GitHub Secrets
       run: |
-        python user_interface.py --matchmaking  # Chạy lệnh với đối số --matchmaking
+        python user_interface.py --matchmaking 
