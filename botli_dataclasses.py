@@ -1,3 +1,4 @@
+from asyncio import Task
 from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Any, Literal
@@ -275,3 +276,42 @@ class Syzygy_Result:
     moves: list[chess.Move]
     wdl: Literal[-2, -1, 0, 1, 2]
     dtz: int
+
+
+@dataclass
+class Tournament_Request:
+    id_: str
+    team: str | None
+    password: str | None
+
+
+@dataclass
+class Tournament:
+    id_: str
+    seconds_to_start: int | None
+    seconds_to_finish: int | None
+    name: str
+    bots_allowed: bool
+    team: str | None
+    password: str | None
+    start_task: Task[None] | None = None
+    end_task: Task[None] | None = None
+
+    @classmethod
+    def from_tournament_info(cls,
+                             tournament_info: dict[str, Any],
+                             tournament_request: Tournament_Request) -> 'Tournament':
+        return cls(tournament_info['id'],
+                   tournament_info.get('secondsToStart'),
+                   tournament_info.get('secondsToFinish'),
+                   tournament_info.get('fullName', ''),
+                   tournament_info.get('botsAllowed', False),
+                   tournament_request.team,
+                   tournament_request.password)
+
+    def cancel(self) -> None:
+        if self.start_task:
+            self.start_task.cancel()
+
+        if self.end_task:
+            self.end_task.cancel()

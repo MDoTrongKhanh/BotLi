@@ -5,7 +5,7 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 import aiohttp
-from tenacity import after_log, retry, retry_if_exception_type, wait_fixed
+from tenacity import before_sleep_log, retry, retry_if_exception_type, wait_fixed
 
 from botli_dataclasses import API_Challenge_Reponse, Challenge_Request
 from config import Config
@@ -14,18 +14,18 @@ from enums import Decline_Reason, Variant
 logger = logging.getLogger(__name__)
 BASIC_RETRY_CONDITIONS = {'retry': retry_if_exception_type((aiohttp.ClientError, TimeoutError)),
                           'wait': wait_fixed(5.0),
-                          'after': after_log(logger, logging.DEBUG)}
+                          'before_sleep': before_sleep_log(logger, logging.DEBUG)}
 JSON_RETRY_CONDITIONS = {'retry': retry_if_exception_type((aiohttp.ClientError, json.JSONDecodeError, TimeoutError)),
                          'wait': wait_fixed(5.0),
-                         'after': after_log(logger, logging.DEBUG)}
+                         'before_sleep': before_sleep_log(logger, logging.DEBUG)}
 GAME_STREAM_RETRY_CONDITIONS = {'retry': retry_if_exception_type((aiohttp.ClientError,
                                                                   json.JSONDecodeError,
                                                                   TimeoutError)),
                                 'wait': wait_fixed(1.0),
-                                'after': after_log(logger, logging.DEBUG)}
+                                'before_sleep': before_sleep_log(logger, logging.DEBUG)}
 MOVE_RETRY_CONDITIONS = {'retry': retry_if_exception_type((aiohttp.ClientError, TimeoutError)),
                          'wait': wait_fixed(1.0),
-                         'after': after_log(logger, logging.DEBUG)}
+                         'before_sleep': before_sleep_log(logger, logging.DEBUG)}
 
 
 class API:
@@ -226,10 +226,32 @@ class API:
             return json_response[token]['scopes']
 
     @retry(**JSON_RETRY_CONDITIONS)
+    async def get_tournament_info(self, tournament_id: str) -> dict[str, Any]:
+        async with self.lichess_session.get(f'/api/tournament/{tournament_id}') as response:
+            return await response.json()
+
+    @retry(**JSON_RETRY_CONDITIONS)
     async def get_user_status(self, username: str) -> dict[str, Any]:
         async with self.lichess_session.get('/api/users/status', params={'ids': username}) as response:
             json_response = await response.json()
             return json_response[0]
+
+    @retry(**JSON_RETRY_CONDITIONS)
+    async def join_tournament(self, tournament_id: str, team: str | None, password: str | None) -> bool:
+        data: dict[str, str] = {}
+        if team:
+            data['team'] = team.lower()
+        if password:
+            data['password'] = password
+
+        async with self.lichess_session.post(f'/api/tournament/{tournament_id}/join', data=data) as response:
+            json_response = await response.json()
+
+            if 'error' in json_response:
+                print(f'Joining tournament "{tournament_id}" failed: {json_response["error"]}')
+                return False
+
+            return True
 
     @retry(**BASIC_RETRY_CONDITIONS)
     async def resign_game(self, game_id: str) -> bool:
@@ -270,6 +292,16 @@ class API:
     async def upgrade_account(self) -> bool:
         try:
             async with self.lichess_session.post('/api/bot/account/upgrade') as response:
+                response.raise_for_status()
+                return True
+        except aiohttp.ClientResponseError as e:
+            print(e)
+            return False
+
+    @retry(**BASIC_RETRY_CONDITIONS)
+    async def withdraw_tournament(self, tournament_id: str) -> bool:
+        try:
+            async with self.lichess_session.post(f'/api/tournament/{tournament_id}/withdraw') as response:
                 response.raise_for_status()
                 return True
         except aiohttp.ClientResponseError as e:
