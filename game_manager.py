@@ -36,7 +36,13 @@ class Game_Manager:
         self.unstarted_tournaments: dict[str, Tournament] = {}
         self.tournaments_to_join: deque[Tournament] = deque()
         self.tournaments: dict[str, Tournament] = {}
-
+        # Dictionary to track rematch counts between pairs of players
+        self.rematch_counts: dict[frozenset[str], int] = {}
+        # Flag to indicate if we're in a rematch
+        self.in_rematch = False
+        # Current rematch opponent
+        self.rematch_opponent = None
+ 
     def stop(self):
         self.is_running = False
         self.changed_event.set()
